@@ -19,26 +19,37 @@ export class StorageRepository {
   ): Promise<string> {
 
     console.log("========== STORAGE UPLOAD ==========");
+    console.log("URL    :", process.env.NEXT_PUBLIC_SUPABASE_URL);
     console.log("Bucket :", this.BUCKET);
     console.log("Path   :", path);
     console.log("Name   :", file.name);
     console.log("Size   :", file.size);
     console.log("Type   :", file.type);
 
+    // pastikan path bersih
+    const cleanPath = path
+      .replace(/^\/+/, "")
+      .replace(/\/+/g, "/");
+
+    console.log("Clean Path :", cleanPath);
+
     const { data, error } =
       await supabaseAdmin.storage
         .from(this.BUCKET)
-        .upload(path, file, {
+        .upload(cleanPath, file, {
           cacheControl: "3600",
           upsert: true,
+          contentType: file.type,
         });
 
     if (error) {
-      console.error("STORAGE ERROR:", error);
+      console.error("========== STORAGE ERROR ==========");
+      console.error(JSON.stringify(error, null, 2));
       throw error;
     }
 
-    console.log("UPLOAD SUCCESS:", data);
+    console.log("========== STORAGE SUCCESS ==========");
+    console.log(data);
 
     return data.path;
   }
@@ -47,15 +58,19 @@ export class StorageRepository {
     path: string
   ): Promise<void> {
 
+    const cleanPath = path
+      .replace(/^\/+/, "")
+      .replace(/\/+/g, "/");
+
     const { error } =
       await supabaseAdmin.storage
         .from(this.BUCKET)
-        .remove([path]);
+        .remove([cleanPath]);
 
     if (error) {
-      console.error("REMOVE ERROR:", error);
+      console.error("REMOVE ERROR");
+      console.error(JSON.stringify(error, null, 2));
       throw error;
     }
-
   }
 }
