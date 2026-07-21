@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import useCountdown from "@/components/hooks/useCountdown";
@@ -61,16 +62,18 @@ export default function Hero() {
               {/* Buttons */}
               <div className="mt-14 flex flex-wrap gap-6">
 
-                <Button
-                  size="lg"
-                  className="group rounded-xl bg-yellow-400 px-8 py-6 text-lg font-bold text-black transition-all duration-300 hover:-translate-y-1 hover:bg-yellow-300 hover:shadow-xl hover:shadow-yellow-500/30"
-                >
-                  Apply Now
+                <Link href="/register">
+  <Button
+    size="lg"
+    className="group rounded-xl bg-yellow-400 px-8 py-6 text-lg font-bold text-black transition-all duration-300 hover:-translate-y-1 hover:bg-yellow-300 hover:shadow-xl hover:shadow-yellow-500/30"
+  >
+    Apply Now
 
-                  <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">
-                    →
-                  </span>
-                </Button>
+    <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">
+      →
+    </span>
+  </Button>
+</Link>
 
                 <Button
                   size="lg"
