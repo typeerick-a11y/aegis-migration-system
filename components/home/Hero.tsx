@@ -7,6 +7,7 @@ import useCountdown from "@/components/hooks/useCountdown";
 import CountdownCard from "@/components/shared/CountDownCard";
 import MigrationStatusPanel from "@/components/home/MigrationStatusPanel";
 
+
 export default function Hero() {
   const migrationDate = new Date("2026-09-20T00:00:00Z");
 
