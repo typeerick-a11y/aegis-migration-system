@@ -96,8 +96,6 @@ export function PlayerRegistrationForm() {
 
 </form>
 
-    
-    
 
   );
 

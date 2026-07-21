@@ -33,14 +33,17 @@ export class StorageRepository {
 
     console.log("Clean Path :", cleanPath);
 
-    const { data, error } =
-      await supabaseAdmin.storage
-        .from(this.BUCKET)
-        .upload(cleanPath, file, {
-          cacheControl: "3600",
-          upsert: true,
-          contentType: file.type,
-        });
+   const bytes = await file.arrayBuffer();
+const buffer = Buffer.from(bytes);
+
+const { data, error } =
+  await supabaseAdmin.storage
+    .from(this.BUCKET)
+    .upload(cleanPath, buffer, {
+      cacheControl: "3600",
+      upsert: true,
+      contentType: file.type,
+    });
 
     if (error) {
       console.error("========== STORAGE ERROR ==========");
