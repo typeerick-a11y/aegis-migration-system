@@ -13,15 +13,17 @@ import { STORAGE } from "@/lib/constants/storage";
 export class StorageRepository {
   private static readonly BUCKET = STORAGE.BUCKET;
 
-  /**
-   * Upload file ke Supabase Storage
-   * Return:
-   *   "123456789/governor-info.webp"
-   */
   static async upload(
     path: string,
     file: File
   ): Promise<string> {
+
+    console.log("========== STORAGE UPLOAD ==========");
+    console.log("Bucket :", this.BUCKET);
+    console.log("Path   :", path);
+    console.log("Name   :", file.name);
+    console.log("Size   :", file.size);
+    console.log("Type   :", file.type);
 
     const { data, error } =
       await supabaseAdmin.storage
@@ -32,15 +34,15 @@ export class StorageRepository {
         });
 
     if (error) {
+      console.error("STORAGE ERROR:", error);
       throw error;
     }
+
+    console.log("UPLOAD SUCCESS:", data);
 
     return data.path;
   }
 
-  /**
-   * Hapus file dari Storage
-   */
   static async remove(
     path: string
   ): Promise<void> {
@@ -51,6 +53,7 @@ export class StorageRepository {
         .remove([path]);
 
     if (error) {
+      console.error("REMOVE ERROR:", error);
       throw error;
     }
 
