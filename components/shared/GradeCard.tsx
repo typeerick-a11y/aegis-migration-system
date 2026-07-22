@@ -17,11 +17,11 @@ export default function GradeCard({
     accepted >= slot
       ? {
           text: "FULL",
-          color: "text-red-400",
+          className: "bg-red-500/20 text-red-400",
         }
       : {
-          text: "Accepting",
-          color: "text-green-400",
+          text: "ACCEPTING",
+          className: "bg-green-500/20 text-green-400",
         };
 
   return (
@@ -46,36 +46,28 @@ export default function GradeCard({
         <span>✅ Accepted</span>
 
         <span>
-  {accepted} / {slot} Slots
-</span>
+          {accepted} / {slot} Slots
+        </span>
       </div>
 
       {/* Progress */}
 
       <div className="mt-5 h-3 overflow-hidden rounded-full bg-zinc-800">
-
         <div
           className="h-full rounded-full bg-yellow-400 transition-all"
           style={{
             width: `${percentage}%`,
           }}
         />
-
       </div>
 
       {/* Status */}
 
-
-    <span
-  className={`mt-5 inline-flex rounded-full px-3 py-1 text-sm font-semibold ${
-    accepted >= slot
-      ? "bg-red-500/20 text-red-400"
-      : "bg-green-500/20 text-green-400"
-  }`}
->
-  
-  {accepted >= slot ? "FULL" : "ACCEPTING"}
-</span>
+      <span
+        className={`mt-5 inline-flex rounded-full px-3 py-1 text-sm font-semibold ${status.className}`}
+      >
+        {status.text}
+      </span>
 
     </div>
   );

@@ -66,13 +66,16 @@ export function GovernorInformationCard() {
           <div className="space-y-2 md:col-span-2">
 
             <Label htmlFor="discordId">
-              Discord ID
+              Discord Username
             </Label>
 
             <Input
               id="discordId"
               name="discordId"
-              placeholder="username"
+              placeholder="your.discord.username"
+              required
+              maxLength={32}
+              autoComplete="off"
             />
 
           </div>

@@ -9,8 +9,6 @@
 
 import Link from "next/link";
 import { cookies } from "next/headers";
-
-import { Button } from "@/components/ui/button";
 import CopyGovernorButton from "@/components/player/CopyGovernorButton";
 
 import {

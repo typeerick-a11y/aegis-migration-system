@@ -12,9 +12,6 @@ import type { PlayerRegistrationFormInput } from "@/lib/validation/player-form";
 import { StorageService }
   from "@/lib/services/storage.service";
 
-import { PlayerRepository }
-  from "@/lib/repositories/player.repository";
-
 import { MeritService }
   from "@/lib/services/merit.service";
 
@@ -26,7 +23,6 @@ import { MigrationValidationService }
 
 import { PlayerService }
   from "@/lib/services/player.service";  
-import type { PlayerRecord } from "@/lib/types/database";
 
 
 export class MigrationService {
