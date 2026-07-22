@@ -10,6 +10,11 @@
  */
 
 import { useActionState } from "react";
+import {
+  FormProvider,
+  useForm,
+} from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useFormStatus } from "react-dom";
 
 import { GovernorInformationCard } from "./cards/GovernorInformationCard";
@@ -22,6 +27,11 @@ import { Button } from "@/components/ui/button";
 import { registerPlayer } from "@/app/actions/register-player";
 
 import type { ActionResult } from "@/lib/types/action";
+
+import {
+  PlayerRegistrationFormSchema,
+  type PlayerRegistrationFormValues
+} from "@/lib/validation/player-form";
 
 const initialState: ActionResult = {
   success: true,
@@ -46,24 +56,43 @@ function SubmitButton() {
 }
 
 export function PlayerRegistrationForm() {
+
   const [state, formAction] =
     useActionState(
       registerPlayer,
       initialState
     );
 
-  return (
+  const form =
+  useForm<PlayerRegistrationFormValues>({
+      resolver: zodResolver(
+        PlayerRegistrationFormSchema
+      ),
+      mode: "onChange",
+    });
+
+ return (
+
+  <FormProvider {...form}>
+
     <form
       action={formAction}
       className="space-y-8"
     >
+
       {!state.success && state.message && (
+
         <div className="rounded-md border border-red-500 bg-red-50 p-4 text-red-600">
+
           {state.message}
+
         </div>
+
       )}
 
-      <GovernorInformationCard />
+      <GovernorInformationCard
+        errors={state.errors}
+      />
 
       <PowerInformationCard />
 
@@ -72,8 +101,15 @@ export function PlayerRegistrationForm() {
       <ScreenshotCard />
 
       <div className="flex justify-end">
+
         <SubmitButton />
+
       </div>
+
     </form>
-  );
+
+  </FormProvider>
+
+);
+
 }

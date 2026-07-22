@@ -17,6 +17,29 @@ const ALLOWED_IMAGE_TYPES = [
   "image/webp",
 ];
 
+const ScreenshotSchema = z
+  .instanceof(File, {
+    message: "Screenshot wajib diupload",
+  })
+  .refine(
+    (file) => file.size > 0,
+    {
+      message: "Screenshot wajib diupload",
+    }
+  )
+  .refine(
+    (file) => file.size <= MAX_FILE_SIZE,
+    {
+      message: "Ukuran screenshot maksimal 5 MB",
+    }
+  )
+  .refine(
+    (file) => ALLOWED_IMAGE_TYPES.includes(file.type),
+    {
+      message: "Format file harus JPG, PNG, atau WEBP",
+    }
+  );
+
 export const PlayerRegistrationFormSchema = z.object({
 
   governorId: z
@@ -32,10 +55,10 @@ export const PlayerRegistrationFormSchema = z.object({
     .max(30, "Nickname maksimal 30 karakter"),
 
   discordId: z
-  .string()
-  .trim()
-  .min(1, "Discord Username wajib diisi")
-  .max(32, "Discord Username maksimal 32 karakter"),
+    .string()
+    .trim()
+    .min(1, "Discord Username wajib diisi")
+    .max(32, "Discord Username maksimal 32 karakter"),
 
   power: z.coerce
     .number()
@@ -51,41 +74,14 @@ export const PlayerRegistrationFormSchema = z.object({
 
   migrationTicketReady: z.boolean(),
 
-  profileScreenshot: z
-    .instanceof(File, {
-      message: "Profile Screenshot wajib diupload",
-    })
-    .refine(
-      (file) => file.size > 0,
-      "Profile Screenshot wajib diupload"
-    )
-    .refine(
-      (file) => file.size <= MAX_FILE_SIZE,
-      "Ukuran Profile Screenshot maksimal 5 MB"
-    )
-    .refine(
-      (file) => ALLOWED_IMAGE_TYPES.includes(file.type),
-      "Format Profile Screenshot harus JPEG, PNG, atau WEBP"
-    ),
+  profileScreenshot: ScreenshotSchema,
 
-  troopScreenshot: z
-    .instanceof(File, {
-      message: "Troop Screenshot wajib diupload",
-    })
-    .refine(
-      (file) => file.size > 0,
-      "Troop Screenshot wajib diupload"
-    )
-    .refine(
-      (file) => file.size <= MAX_FILE_SIZE,
-      "Ukuran Troop Screenshot maksimal 5 MB"
-    )
-    .refine(
-      (file) => ALLOWED_IMAGE_TYPES.includes(file.type),
-      "Format Troop Screenshot harus JPEG, PNG, atau WEBP"
-    ),
+  troopScreenshot: ScreenshotSchema,
 
 });
 
+export type PlayerRegistrationFormValues =
+  z.input<typeof PlayerRegistrationFormSchema>;
+
 export type PlayerRegistrationFormInput =
-  z.infer<typeof PlayerRegistrationFormSchema>;
+  z.output<typeof PlayerRegistrationFormSchema>;
