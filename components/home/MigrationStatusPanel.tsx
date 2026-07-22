@@ -1,17 +1,23 @@
-import migrationStatus from "@/components/data/migrationStatus";
+import type {
+  MigrationStatus,
+} from "@/lib/types/migration-status";
 
-export default function MigrationStatusPanel() {
+interface MigrationStatusPanelProps {
+  migrationStatus: MigrationStatus[];
+}
+
+export default function MigrationStatusPanel({
+  migrationStatus,
+}: MigrationStatusPanelProps) {
+
   const totalRegistered = migrationStatus.reduce(
-    (sum, item) => sum + item.applicants,
+    (sum, item) => sum + item.registered,
     0
   );
 
-  const totalAccepted = migrationStatus.reduce(
-    (sum, item) => sum + item.accepted,
-    0
-  );
+  const totalAccepted = 0;
 
-  const totalPending = totalRegistered - totalAccepted;
+  const totalPending = totalRegistered;
 
   return (
     <section
@@ -36,7 +42,7 @@ export default function MigrationStatusPanel() {
           border-b
           border-yellow-500/20
           px-5
-          py-6
+          py-5
           md:flex-row
           md:items-center
           md:justify-between
@@ -74,21 +80,17 @@ export default function MigrationStatusPanel() {
       {/* ================= MOBILE ================= */}
 
       <div className="block md:hidden">
-
         <div className="divide-y divide-yellow-500/10">
 
           {migrationStatus.map((item) => {
 
-            const percentage =
-              (item.accepted / item.slot) * 100;
+            const percentage = 0;
 
             return (
-
               <div
                 key={item.grade}
                 className="px-5 py-4"
               >
-
                 <div className="flex items-center justify-between">
 
                   <h3 className="font-bold text-white">
@@ -96,7 +98,7 @@ export default function MigrationStatusPanel() {
                   </h3>
 
                   <span className="text-sm text-zinc-400">
-                    {item.accepted}/{item.slot}
+                    0/{item.slots}
                   </span>
 
                 </div>
@@ -104,41 +106,49 @@ export default function MigrationStatusPanel() {
                 <div className="mt-2 flex justify-between text-sm">
 
                   <span className="text-zinc-400">
-                    {item.applicants} Applicants
+                    {item.registered} Registered
                   </span>
 
                   <span className="font-semibold text-yellow-400">
-                    {Math.round(percentage)}%
+                    0%
                   </span>
 
                 </div>
 
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-800">
-
+                <div
+                  className="
+                    mt-2
+                    h-3
+                    overflow-hidden
+                    rounded-full
+                    bg-zinc-800/80
+                    shadow-inner
+                  "
+                >
                   <div
                     className="
                       h-full
                       rounded-full
                       bg-gradient-to-r
-                      from-yellow-500
+                      from-yellow-600
                       via-yellow-400
                       to-yellow-300
+                      transition-all
+                      duration-500
+                      shadow-[0_0_12px_rgba(250,204,21,0.45)]
                     "
                     style={{
                       width: `${percentage}%`,
                     }}
                   />
-
                 </div>
 
               </div>
-
             );
 
           })}
 
         </div>
-
       </div>
 
       {/* ================= DESKTOP ================= */}
@@ -149,7 +159,7 @@ export default function MigrationStatusPanel() {
           className="
             mb-6
             grid
-            grid-cols-[170px_120px_1fr_120px]
+            grid-cols-[170px_140px_1fr_120px]
             gap-6
             text-sm
             font-bold
@@ -159,22 +169,24 @@ export default function MigrationStatusPanel() {
           "
         >
           <div>Grade</div>
-          <div>Applicants</div>
+
+          <div>Registered</div>
+
           <div>Progress</div>
+
           <div className="text-right">
             Accepted
           </div>
+
         </div>
 
         <div className="space-y-5">
 
           {migrationStatus.map((item) => {
 
-            const percentage =
-              (item.accepted / item.slot) * 100;
+            const percentage = 0;
 
             return (
-
               <div
                 key={item.grade}
                 className="
@@ -184,12 +196,13 @@ export default function MigrationStatusPanel() {
                   border
                   border-yellow-500/10
                   bg-black/20
-                  p-5
+                  px-6
+                  py-4
                   transition-all
                   duration-300
                   hover:border-yellow-400/40
                   hover:bg-black/30
-                  md:grid-cols-[170px_120px_1fr_120px]
+                  md:grid-cols-[170px_140px_1fr_120px]
                   md:items-center
                 "
               >
@@ -205,33 +218,42 @@ export default function MigrationStatusPanel() {
                 <div>
 
                   <span className="font-bold text-yellow-400">
-                    {item.applicants}
+                    {item.registered}
                   </span>
 
                   <span className="ml-2 text-zinc-400">
-                    Applicants
+                    Registered
                   </span>
 
                 </div>
 
                 <div>
 
-                  <div className="h-3 overflow-hidden rounded-full bg-zinc-800">
-
+                  <div
+                    className="
+                      h-4
+                      overflow-hidden
+                      rounded-full
+                      bg-zinc-800/80
+                      shadow-inner
+                    "
+                  >
                     <div
                       className="
                         h-full
                         rounded-full
                         bg-gradient-to-r
-                        from-yellow-500
+                        from-yellow-600
                         via-yellow-400
                         to-yellow-300
+                        transition-all
+                        duration-500
+                        shadow-[0_0_12px_rgba(250,204,21,0.45)]
                       "
                       style={{
                         width: `${percentage}%`,
                       }}
                     />
-
                   </div>
 
                 </div>
@@ -239,18 +261,17 @@ export default function MigrationStatusPanel() {
                 <div className="text-right">
 
                   <span className="font-bold text-white">
-                    {item.accepted}
+                    0
                   </span>
 
                   <span className="text-zinc-500">
                     {" / "}
-                    {item.slot}
+                    {item.slots}
                   </span>
 
                 </div>
 
               </div>
-
             );
 
           })}
@@ -268,7 +289,7 @@ export default function MigrationStatusPanel() {
           border-t
           border-yellow-500/20
           bg-black/20
-          py-5
+          py-4
           text-center
         "
       >

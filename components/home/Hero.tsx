@@ -5,18 +5,37 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import useCountdown from "@/components/hooks/useCountdown";
 import CountdownCard from "@/components/shared/CountDownCard";
-import MigrationStatusPanel from "@/components/home/MigrationStatusPanel";
 import type {
   MigrationSettings,
 } from "@/lib/types/migration-settings";
 
+
+import MigrationStatusPanel
+  from "@/components/home/MigrationStatusPanel";
+
+import type {
+  MigrationStatus,
+} from "@/lib/types/migration-status";
+
+
 interface HeroProps {
+
   settings: MigrationSettings;
+
+  migrationStatus:
+    MigrationStatus[];
+
 }
 
 export default function Hero({
+
   settings,
+
+  migrationStatus,
+
 }: HeroProps) {
+
+  
   const migrationDate =
   new Date(settings.regularStart);
 
@@ -25,9 +44,14 @@ export default function Hero({
 
   return (
     <section
-      id="migration"
-      className="relative min-h-screen overflow-hidden"
-    >
+  id="migration"
+  className="
+    relative
+    min-h-screen
+    overflow-hidden
+    pb-28
+"
+>
       {/* Background */}
       <Image
         src="/images/hero/hero-bg.jpg"
@@ -98,14 +122,17 @@ export default function Hero({
             </div>
 
           </div>
+          <div className="-mt-10 relative z-20">
 
-          {/* Migration Status */}
-          <div className="mt-16">
-            <MigrationStatusPanel />
-          </div>
+  <MigrationStatusPanel
+    migrationStatus={migrationStatus}
+  />
+
+</div>
 
         </div>
       </div>
     </section>
+    
   );
 }
