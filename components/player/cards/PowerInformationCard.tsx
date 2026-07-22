@@ -16,9 +16,23 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { useFormContext } from "react-hook-form";
+
+import type {
+  PlayerRegistrationFormValues,
+} from "@/lib/validation/player-form";
+
 import { SectionHeader } from "../shared/SectionHeader";
 
 export function PowerInformationCard() {
+
+  const {
+    register,
+    formState: {
+      errors: clientErrors,
+    },
+  } = useFormContext<PlayerRegistrationFormValues>();
+
   return (
     <Card>
 
@@ -35,6 +49,8 @@ export function PowerInformationCard() {
 
         <div className="grid gap-6">
 
+          {/* Power */}
+
           <div className="space-y-2">
 
             <Label htmlFor="power">
@@ -43,12 +59,24 @@ export function PowerInformationCard() {
 
             <Input
               id="power"
-              name="power"
               type="number"
-              placeholder="50000000"
+              inputMode="numeric"
+              min={50000000}
+              step={1}
+              placeholder="Minimum 50,000,000"
+              aria-invalid={!!clientErrors.power}
+              {...register("power")}
             />
 
+            {clientErrors.power && (
+              <p className="text-sm text-red-500">
+                {clientErrors.power.message}
+              </p>
+            )}
+
           </div>
+
+          {/* Merits */}
 
           <div className="space-y-2">
 
@@ -58,12 +86,24 @@ export function PowerInformationCard() {
 
             <Input
               id="merits"
-              name="merits"
               type="number"
-              placeholder="250"
+              inputMode="numeric"
+              min={5000000}
+              step={1}
+              placeholder="Minimum 5,000,000"
+              aria-invalid={!!clientErrors.merits}
+              {...register("merits")}
             />
 
+            {clientErrors.merits && (
+              <p className="text-sm text-red-500">
+                {clientErrors.merits.message}
+              </p>
+            )}
+
           </div>
+
+          {/* Strongest Troop Power */}
 
           <div className="space-y-2">
 
@@ -73,10 +113,22 @@ export function PowerInformationCard() {
 
             <Input
               id="strongestTroopPower"
-              name="strongestTroopPower"
               type="number"
-              placeholder="12000000"
+              inputMode="numeric"
+              min={10000000}
+              step={1}
+              placeholder="Minimum 10,000,000"
+              aria-invalid={
+                !!clientErrors.strongestTroopPower
+              }
+              {...register("strongestTroopPower")}
             />
+
+            {clientErrors.strongestTroopPower && (
+              <p className="text-sm text-red-500">
+                {clientErrors.strongestTroopPower.message}
+              </p>
+            )}
 
           </div>
 
