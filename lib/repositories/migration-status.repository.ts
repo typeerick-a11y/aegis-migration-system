@@ -17,7 +17,10 @@ export class MigrationStatusRepository {
 
   static async getAll(): Promise<MigrationStatus[]> {
 
-    const { data: grades, error: gradesError } =
+    const {
+      data: grades,
+      error: gradesError,
+    } =
       await supabaseAdmin
         .from("grade_rules")
         .select("*")
@@ -36,7 +39,14 @@ export class MigrationStatusRepository {
 
     for (const grade of grades) {
 
-      const { count, error } =
+      // ======================================================
+      // Registered Players
+      // ======================================================
+
+      const {
+        count: registeredCount,
+        error: registeredError,
+      } =
         await supabaseAdmin
           .from("players")
           .select("*", {
@@ -45,13 +55,42 @@ export class MigrationStatusRepository {
           })
           .eq("grade_id", grade.id);
 
-      if (error) {
+      if (registeredError) {
 
         throw new Error(
           "Failed to count registered players."
         );
 
       }
+
+      // ======================================================
+      // Accepted Players
+      // ======================================================
+
+      const {
+        count: acceptedCount,
+        error: acceptedError,
+      } =
+        await supabaseAdmin
+          .from("players")
+          .select("*", {
+            count: "exact",
+            head: true,
+          })
+          .eq("grade_id", grade.id)
+          .eq("status", "Accepted");
+
+      if (acceptedError) {
+
+        throw new Error(
+          "Failed to count accepted players."
+        );
+
+      }
+
+      // ======================================================
+      // Result
+      // ======================================================
 
       result.push({
 
@@ -61,11 +100,15 @@ export class MigrationStatusRepository {
 
         slots: grade.slots,
 
-        registered: count ?? 0,
+        registered:
+          registeredCount ?? 0,
+
+        accepted:
+          acceptedCount ?? 0,
 
         remaining:
           Math.max(
-            grade.slots - (count ?? 0),
+            grade.slots - (registeredCount ?? 0),
             0
           ),
 

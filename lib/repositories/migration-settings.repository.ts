@@ -35,6 +35,8 @@ export class MigrationSettingsRepository {
 
       id: data.id,
 
+      kingdomName: data.kingdom_name,
+
       kingdomNumber: data.kingdom_number,
 
       previewStart: data.preview_start,
