@@ -6,10 +6,19 @@ import { Button } from "@/components/ui/button";
 import useCountdown from "@/components/hooks/useCountdown";
 import CountdownCard from "@/components/shared/CountDownCard";
 import MigrationStatusPanel from "@/components/home/MigrationStatusPanel";
+import type {
+  MigrationSettings,
+} from "@/lib/types/migration-settings";
 
+interface HeroProps {
+  settings: MigrationSettings;
+}
 
-export default function Hero() {
-  const migrationDate = new Date("2026-09-20T00:00:00Z");
+export default function Hero({
+  settings,
+}: HeroProps) {
+  const migrationDate =
+  new Date(settings.regularStart);
 
   const { days, hours, minutes, seconds } =
     useCountdown(migrationDate);
@@ -51,10 +60,10 @@ export default function Hero() {
             <div className="max-w-3xl">
 
               <h1 className="mt-6 text-6xl font-black leading-[0.95] tracking-tight text-white md:text-8xl">
-                KINGDOM E300
-                <br />
-                Awaits You!
-              </h1>
+ KINGDOM E{settings.kingdomNumber}
+  <br />
+  Awaits You!
+</h1>
 
               <p className="mt-8 max-w-2xl text-xl leading-9 text-zinc-300">
                 Join one of the strongest kingdoms in Age of Empires Mobile.
