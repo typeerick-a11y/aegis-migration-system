@@ -39,22 +39,35 @@ export async function registerPlayer(
     const player =
       parseRegisterPlayer(formData);
 
+      console.log("========== FORM DATA ==========");
+
+for (const [key, value] of formData.entries()) {
+  console.log(key, value);
+}
+
+console.log("===============================");
+
     // ==========================================================
     // Server Validation
     // ==========================================================
 
     const validation =
-      PlayerRegistrationFormSchema.safeParse(player);
+  PlayerRegistrationFormSchema.safeParse(player);
 
-    if (!validation.success) {
+if (!validation.success) {
 
-      return {
-        success: false,
-        message: "Validation failed.",
-        errors: validation.error.flatten().fieldErrors,
-      };
+  console.log("==========================");
+  console.log("VALIDATION ERROR");
+  console.log(validation.error.flatten());
+  console.log("==========================");
 
-    }
+  return {
+    success: false,
+    message: "Validation failed.",
+    errors: validation.error.flatten().fieldErrors,
+  };
+
+}
 
     const validatedPlayer =
       validation.data;

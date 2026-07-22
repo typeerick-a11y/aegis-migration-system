@@ -168,6 +168,7 @@ const removeTroopImage = async () => {
             <Input
               ref={profileInputRef}
               id="profileScreenshot"
+              name="profileScreenshot"
               type="file"
               accept=".jpg,.jpeg,.png,.webp"
               aria-invalid={
@@ -229,6 +230,7 @@ const removeTroopImage = async () => {
             <Input
               ref={troopInputRef}
               id="troopScreenshot"
+              name="troopScreenshot"
               type="file"
               accept=".jpg,.jpeg,.png,.webp"
               aria-invalid={
