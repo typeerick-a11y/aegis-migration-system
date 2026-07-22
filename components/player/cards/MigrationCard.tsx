@@ -16,10 +16,24 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
+import {
+  Controller,
+  useFormContext,
+} from "react-hook-form";
+
+import type {
+  PlayerRegistrationFormValues,
+} from "@/lib/validation/player-form";
+
 import { SectionHeader } from "../shared/SectionHeader";
 
 export function MigrationCard() {
+
+  const { control } =
+    useFormContext<PlayerRegistrationFormValues>();
+
   return (
+
     <Card>
 
       <CardHeader>
@@ -35,9 +49,21 @@ export function MigrationCard() {
 
         <div className="flex items-center space-x-3">
 
-          <Checkbox
-            id="migrationTicketReady"
+          <Controller
             name="migrationTicketReady"
+            control={control}
+            defaultValue={false}
+            render={({ field }) => (
+
+              <Checkbox
+                id="migrationTicketReady"
+                checked={field.value}
+                onCheckedChange={(checked) =>
+                  field.onChange(Boolean(checked))
+                }
+              />
+
+            )}
           />
 
           <Label
@@ -52,5 +78,7 @@ export function MigrationCard() {
       </CardContent>
 
     </Card>
+
   );
+
 }

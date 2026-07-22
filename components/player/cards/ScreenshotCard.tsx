@@ -12,13 +12,47 @@ import {
   CardContent,
   CardHeader,
 } from "@/components/ui/card";
+import { useFormContext } from "react-hook-form";
 
+import type {
+  PlayerRegistrationFormValues,
+} from "@/lib/validation/player-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { SectionHeader } from "../shared/SectionHeader";
+import type { ChangeEvent } from "react";
 
 export function ScreenshotCard() {
+ const {
+  setValue,
+  trigger,
+  formState: {
+    errors: clientErrors,
+  },
+} = useFormContext<PlayerRegistrationFormValues>();
+
+const handleFileChange = async (
+  field: "profileScreenshot" | "troopScreenshot",
+  event: ChangeEvent<HTMLInputElement>,
+) => {
+
+  const file = event.target.files?.[0];
+
+  if (!file) {
+    return;
+  }
+
+  setValue(field, file, {
+    shouldDirty: true,
+    shouldTouch: true,
+  });
+
+  await trigger(field);
+
+};
+
+void clientErrors;
   return (
     <Card>
 
@@ -42,11 +76,25 @@ export function ScreenshotCard() {
             </Label>
 
             <Input
-              id="profileScreenshot"
-              name="profileScreenshot"
-              type="file"
-              accept="image/*"
-            />
+  id="profileScreenshot"
+  type="file"
+  accept=".jpg,.jpeg,.png,.webp"
+  aria-invalid={!!clientErrors.profileScreenshot}
+
+
+ onChange={(event) =>
+  handleFileChange(
+    "profileScreenshot",
+    event
+  )
+}
+/>
+
+{clientErrors.profileScreenshot && (
+  <p className="text-sm text-red-500">
+    {clientErrors.profileScreenshot.message}
+  </p>
+)}
 
           </div>
 
@@ -57,11 +105,25 @@ export function ScreenshotCard() {
             </Label>
 
             <Input
-              id="troopScreenshot"
-              name="troopScreenshot"
-              type="file"
-              accept="image/*"
-            />
+  id="troopScreenshot"
+  type="file"
+  accept=".jpg,.jpeg,.png,.webp"
+  aria-invalid={!!clientErrors.troopScreenshot}
+  
+  
+  onChange={(event) =>
+  handleFileChange(
+    "troopScreenshot",
+    event
+  )
+}
+/>
+
+{clientErrors.troopScreenshot && (
+  <p className="text-sm text-red-500">
+    {clientErrors.troopScreenshot.message}
+  </p>
+)}
 
           </div>
 
