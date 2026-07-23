@@ -11,6 +11,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 import { parseRegisterPlayer } from "@/lib/helpers/register-player-parser";
 import { REGISTRATION_SUCCESS_COOKIE } from "@/lib/helpers/registration-cookie";
@@ -83,6 +84,10 @@ if (!validation.success) {
 
     const playerRecord =
       savedPlayer as { id: string };
+
+      // Refresh homepage cache
+revalidatePath("/");
+
 
     // ==========================================================
     // Save Success Cookie
