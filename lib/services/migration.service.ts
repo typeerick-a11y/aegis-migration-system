@@ -22,205 +22,207 @@ import { MigrationValidationService }
   from "@/lib/services/migration-validation.service";
 
 import { PlayerService }
-  from "@/lib/services/player.service";  
+  from "@/lib/services/player.service";
 
 
 export class MigrationService {
 
   static async register(
-  player: PlayerRegistrationFormInput
-): Promise<Record<string, unknown>>
+    player: PlayerRegistrationFormInput
+  ): Promise<Record<string, unknown>> {
 
+    let profileScreenshotPath: string | null = null;
 
-   {
-      let profileScreenshotPath: string | null = null;
+    let troopScreenshotPath: string | null = null;
 
-      let troopScreenshotPath: string | null = null;
-      
-      try {
+    try {
 
+      // ==========================================
+      // STEP 2
+      // Upload Profile Screenshot
+      // ==========================================
 
+      profileScreenshotPath =
+        await StorageService.uploadProfileScreenshot(
+          player.governorId,
+          player.profileScreenshot
+        );
 
+      console.log(
+        "Profile Screenshot:",
+        profileScreenshotPath
+      );
 
-  // ==========================================
-// STEP 2
-// Upload Profile Screenshot
-// ==========================================
+      // ==========================================
+      // STEP 3
+      // Upload Troop Screenshot
+      // ==========================================
 
-profileScreenshotPath =
-  await StorageService.uploadProfileScreenshot(
-    player.governorId,
-    player.profileScreenshot
+      troopScreenshotPath =
+        await StorageService.uploadTroopScreenshot(
+          player.governorId,
+          player.troopScreenshot
+        );
 
-  );
+      console.log(
+        "Troop Screenshot:",
+        troopScreenshotPath
+      );
 
-console.log(
-  "Profile Screenshot:",
-  profileScreenshotPath
-);
+      // ==========================================
+      // STEP 4
+      // Calculate Merit Ratio
+      // ==========================================
 
-   // ==========================================
-// STEP 3
-// Upload Troop Screenshot
-// ==========================================
+      const meritRatio =
+        MeritService.calculate(
+          player.power,
+          player.merits
+        );
 
-troopScreenshotPath =
-  await StorageService.uploadTroopScreenshot(
-    player.governorId,
-    player.troopScreenshot
-  );
+      console.log(
+        "Merit Ratio:",
+        meritRatio
+      );
 
-console.log(
-  "Troop Screenshot:",
-  troopScreenshotPath
+      // ==========================================
+      // STEP 5
+      // Find Grade
+      // ==========================================
 
+      const grade =
+        await GradeService.findGradeByPower(
+          player.power
+        );
 
-);
+      if (!grade) {
 
-//rollback test nanti disini
+        throw new Error(
+          "Grade not found."
+        );
 
-  // ==========================================
-// STEP 4
-// Calculate Merit Ratio
-// ==========================================
+      }
 
-const meritRatio =
-  MeritService.calculate(
-    player.power,
-    player.merits
-  );
+      console.log(
+        "Grade:",
+        grade.grade
+      );
 
-console.log(
-  "Merit Ratio:",
-  meritRatio
-);
+      // ==========================================
+      // STEP 6
+      // Build Player Registration
+      // ==========================================
 
-    // ==========================================
-// STEP 5
-// Find Grade
-// ==========================================
+      const playerRegistration = {
 
-const grade =
-  await GradeService.findGradeByPower(
-    player.power
-  );
+        governorId:
+          player.governorId,
 
-if (!grade) {
+        nickname:
+          player.nickname,
 
-  throw new Error(
-    "Grade not found."
-  );
+        discordId:
+          player.discordId,
 
-}
+        power:
+          player.power,
 
-console.log(
-  "Grade:",
-  grade.grade
-);
+        merits:
+          player.merits,
 
-// ==========================================
-// STEP 6
-// Build Player Registration
-// ==========================================
+        meritRatio,
 
-const playerRegistration = {
+        heroId:
+  player.heroId,
 
-  governorId: player.governorId,
+troopType:
+  player.troopType,
 
-  nickname: player.nickname,
+        mainMarchPower:
+          player.mainMarchPower,
 
-  discordId: player.discordId,
+        migrationTicketReady:
+          player.migrationTicketReady,
 
-  power: player.power,
+        profileScreenshot:
+          profileScreenshotPath,
 
-  merits: player.merits,
+        troopScreenshot:
+          troopScreenshotPath,
 
-  meritRatio,
+        gradeId:
+          grade.id,
 
-  strongestTroopPower:
-    player.strongestTroopPower,
+        status:
+          "Pending" as const,
 
-  migrationTicketReady:
-    player.migrationTicketReady,
+        pendingReview:
+          true,
 
-  profileScreenshot:
-    profileScreenshotPath,
+        officerNote:
+          null,
 
-  troopScreenshot:
-    troopScreenshotPath,
+      };
 
-  gradeId:
-    grade.id,
+      console.log(
+        playerRegistration
+      );
 
-  status:
-    "Pending" as const,
+      // ==========================================
+      // STEP 7
+      // Validate Migration
+      // ==========================================
 
-  pendingReview:
-    true,
+      MigrationValidationService.validate(
+        playerRegistration
+      );
 
-  officerNote:
-    null,
+      // ==========================================
+      // STEP 8
+      // Save Player
+      // ==========================================
 
-};
+      const savedPlayer =
+        await PlayerService.savePlayer(
+          playerRegistration
+        );
 
-console.log(
-  playerRegistration
-);
+      console.log(
+        "Player Saved:",
+        savedPlayer
+      );
 
+      return savedPlayer;
 
-// ==========================================
-// STEP 7
-// Validate Migration
-// ==========================================
+    } catch (error) {
 
-MigrationValidationService.validate(
-  playerRegistration
-);
+      console.error(
+        "Migration Error:",
+        error
+      );
 
-// ==========================================
-// STEP 8
-// Save Player
-// ==========================================
+      // Rollback Troop Screenshot
+      if (troopScreenshotPath) {
 
-const savedPlayer =
-  await PlayerService.savePlayer(
-    playerRegistration
-  );
+        await StorageService.remove(
+          troopScreenshotPath
+        );
 
-console.log(
-  "Player Saved:",
-  savedPlayer
-);
+      }
 
-return savedPlayer;
+      // Rollback Profile Screenshot
+      if (profileScreenshotPath) {
 
-} catch (error) {
+        await StorageService.remove(
+          profileScreenshotPath
+        );
 
-  console.error(
-    "Migration Error:",
-    error
-  );
+      }
 
-  // Rollback Troop Screenshot
-  if (troopScreenshotPath) {
+      throw error;
 
-    await StorageService.remove(
-      troopScreenshotPath
-    );
+    }
 
   }
 
-  // Rollback Profile Screenshot
-  if (profileScreenshotPath) {
-
-    await StorageService.remove(
-      profileScreenshotPath
-    );
-
-  }
-
-  throw error;
-
 }
-
-}}

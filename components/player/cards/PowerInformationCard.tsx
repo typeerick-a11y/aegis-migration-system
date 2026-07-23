@@ -7,6 +7,8 @@
  * ==========================================================
  */
 
+"use client";
+
 import {
   Card,
   CardContent,
@@ -16,24 +18,52 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { useFormContext } from "react-hook-form";
 
 import type {
   PlayerRegistrationFormValues,
 } from "@/lib/validation/player-form";
 
-import { SectionHeader } from "../shared/SectionHeader";
+import type {
+  Hero,
+} from "@/lib/types/hero";
 
-export function PowerInformationCard() {
+import { SectionHeader } from "../shared/SectionHeader";
+import { HeroCombobox } from "../shared/HeroCombobox";
+
+interface PowerInformationCardProps {
+  heroes: Hero[];
+}
+
+export function PowerInformationCard({
+  heroes,
+}: PowerInformationCardProps) {
 
   const {
     register,
+    setValue,
+    watch,
     formState: {
       errors: clientErrors,
     },
   } = useFormContext<PlayerRegistrationFormValues>();
 
+  const selectedHero =
+    watch("heroId") ?? "";
+
+  const selectedTroopType =
+    watch("troopType") ?? "";
+
   return (
+
     <Card>
 
       <CardHeader>
@@ -69,9 +99,11 @@ export function PowerInformationCard() {
             />
 
             {clientErrors.power && (
+
               <p className="text-sm text-red-500">
                 {clientErrors.power.message}
               </p>
+
             )}
 
           </div>
@@ -96,38 +128,150 @@ export function PowerInformationCard() {
             />
 
             {clientErrors.merits && (
+
               <p className="text-sm text-red-500">
                 {clientErrors.merits.message}
               </p>
+
             )}
 
           </div>
 
-          {/* Strongest Troop Power */}
+          {/* Main Hero */}
 
           <div className="space-y-2">
 
-            <Label htmlFor="strongestTroopPower">
-              Strongest Troop Power
+            <Label>
+              Main Hero
+            </Label>
+
+            <HeroCombobox
+              heroes={heroes}
+              value={selectedHero}
+              onChange={(value) =>
+                setValue(
+                  "heroId",
+                  value,
+                  {
+                    shouldValidate: true,
+                  }
+                )
+              }
+            />
+
+            <Input
+  type="hidden"
+  {...register("heroId")}
+/>
+
+            {clientErrors.heroId && (
+
+              <p className="text-sm text-red-500">
+                {clientErrors.heroId.message}
+              </p>
+
+            )}
+
+          </div>
+
+          {/* Troop Type */}
+
+          <div className="space-y-2">
+
+            <Label>
+              Troop Type
+            </Label>
+
+            <Select
+            
+              value={selectedTroopType}
+              onValueChange={(value) => {
+
+                setValue(
+                  "troopType",
+                  value as
+                    | "Sword"
+                    | "Pike"
+                    | "Archer"
+                    | "Cavalry",
+                  {
+                    shouldValidate: true,
+                  }
+                );
+
+              }}
+            >
+
+              <SelectTrigger>
+
+                <SelectValue
+                  placeholder="Select troop type"
+                />
+
+              </SelectTrigger>
+
+              <SelectContent>
+
+                <SelectItem value="Sword">
+                  Sword
+                </SelectItem>
+
+                <SelectItem value="Pike">
+                  Pike
+                </SelectItem>
+
+                <SelectItem value="Archer">
+                  Archer
+                </SelectItem>
+
+                <SelectItem value="Cavalry">
+                  Cavalry
+                </SelectItem>
+
+              </SelectContent>
+
+            </Select>
+              <Input
+  type="hidden"
+  {...register("troopType")}
+/>
+            {clientErrors.troopType && (
+
+              <p className="text-sm text-red-500">
+                {clientErrors.troopType.message}
+              </p>
+
+            )}
+
+          </div>
+
+          {/* Main March Power */}
+
+          <div className="space-y-2">
+
+            <Label htmlFor="mainMarchPower">
+              Main March Power
             </Label>
 
             <Input
-              id="strongestTroopPower"
+              id="mainMarchPower"
               type="number"
               inputMode="numeric"
               min={10000000}
               step={1}
               placeholder="Minimum 10,000,000"
               aria-invalid={
-                !!clientErrors.strongestTroopPower
+                !!clientErrors.mainMarchPower
               }
-              {...register("strongestTroopPower")}
+              {...register("mainMarchPower")}
             />
 
-            {clientErrors.strongestTroopPower && (
+            {clientErrors.mainMarchPower && (
+
               <p className="text-sm text-red-500">
-                {clientErrors.strongestTroopPower.message}
+                {clientErrors.mainMarchPower.message}
               </p>
+
             )}
 
           </div>
@@ -137,5 +281,7 @@ export function PowerInformationCard() {
       </CardContent>
 
     </Card>
+
   );
+
 }

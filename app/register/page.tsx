@@ -7,10 +7,19 @@
  * ==========================================================
  */
 
-import { PlayerRegistrationForm } from "@/components/player/PlayerRegistrationForm";
+import { PlayerRegistrationForm }
+  from "@/components/player/PlayerRegistrationForm";
 
-export default function RegisterPage() {
+import { HeroService }
+  from "@/lib/services/hero.service";
+
+export default async function RegisterPage() {
+
+  const heroes =
+    await HeroService.getAllHeroes();
+
   return (
+
     <main className="container mx-auto max-w-4xl px-6 py-10">
 
       <div className="mb-8">
@@ -25,8 +34,12 @@ export default function RegisterPage() {
 
       </div>
 
-      <PlayerRegistrationForm />
+      <PlayerRegistrationForm
+        heroes={heroes}
+      />
 
     </main>
+
   );
+
 }

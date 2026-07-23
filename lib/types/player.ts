@@ -12,6 +12,12 @@ export type PlayerStatus =
   | "Accepted"
   | "Rejected";
 
+export type TroopType =
+  | "Sword"
+  | "Pike"
+  | "Archer"
+  | "Cavalry";
+
 export interface PlayerRegistration {
 
   governorId: string;
@@ -24,16 +30,36 @@ export interface PlayerRegistration {
 
   merits: number;
 
+  /**
+   * Calculated automatically by backend.
+   * meritRatio = merits / power
+   */
   meritRatio: number;
 
-  strongestTroopPower: number;
+  /**
+   * Main March
+   */
+  heroId: string | null;
 
+  troopType: TroopType | null;
+
+  mainMarchPower: number;
+
+  /**
+   * Migration
+   */
   migrationTicketReady: boolean;
 
+  /**
+   * Screenshots
+   */
   profileScreenshot: string;
 
   troopScreenshot: string;
 
+  /**
+   * System
+   */
   gradeId: string | null;
 
   status: PlayerStatus;

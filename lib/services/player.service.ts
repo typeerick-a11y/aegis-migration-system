@@ -42,8 +42,14 @@ export class PlayerService {
       merit_ratio:
         player.meritRatio,
 
-      strongest_troop_power:
-        player.strongestTroopPower,
+      hero_id:
+        player.heroId,
+
+      troop_type:
+        player.troopType,
+
+      main_march_power:
+        player.mainMarchPower,
 
       migration_ticket_ready:
         player.migrationTicketReady,

@@ -30,8 +30,18 @@ export function parseRegisterPlayer(
     merits:
       Number(formData.get("merits")),
 
-    strongestTroopPower:
-      Number(formData.get("strongestTroopPower")),
+    heroId:
+      String(formData.get("heroId") ?? ""),
+
+    troopType:
+      String(formData.get("troopType") ?? "") as
+        | "Sword"
+        | "Pike"
+        | "Archer"
+        | "Cavalry",
+
+    mainMarchPower:
+      Number(formData.get("mainMarchPower")),
 
     migrationTicketReady:
       formData.get("migrationTicketReady") === "on",

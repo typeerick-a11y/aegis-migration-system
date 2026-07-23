@@ -61,25 +61,41 @@ export const PlayerRegistrationFormSchema = z.object({
     .max(32, "Discord Username maksimal 32 karakter"),
 
   power: z.coerce
-  .number()
-  .min(
-    50000000,
-    "Power minimal 50.000.000"
-  ),
+    .number()
+    .min(
+      50000000,
+      "Power minimal 50.000.000"
+    ),
 
   merits: z.coerce
-  .number()
-  .min(
-    5000000,
-    "Merits minimal 5.000.000"
+    .number()
+    .min(
+      5000000,
+      "Merits minimal 5.000.000"
+    ),
+
+  heroId: z
+    .string()
+    .uuid("Hero wajib dipilih"),
+
+  troopType: z.enum(
+    [
+      "Sword",
+      "Pike",
+      "Archer",
+      "Cavalry",
+    ],
+    {
+      message: "Troop Type wajib dipilih",
+    }
   ),
 
-  strongestTroopPower: z.coerce
-  .number()
-  .min(
-    10000000,
-    "Strongest Troop Power minimal 10.000.000"
-  ),
+  mainMarchPower: z.coerce
+    .number()
+    .min(
+      10000000,
+      "Main March Power minimal 10.000.000"
+    ),
 
   migrationTicketReady: z.boolean(),
 

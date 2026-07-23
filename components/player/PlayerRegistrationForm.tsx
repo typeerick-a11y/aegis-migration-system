@@ -27,6 +27,10 @@ import { Button } from "@/components/ui/button";
 import { registerPlayer } from "@/app/actions/register-player";
 
 import type { ActionResult } from "@/lib/types/action";
+import type { Hero }
+  from "@/lib/types/hero";
+
+
 
 import {
   PlayerRegistrationFormSchema,
@@ -55,7 +59,15 @@ function SubmitButton() {
   );
 }
 
-export function PlayerRegistrationForm() {
+interface PlayerRegistrationFormProps {
+
+  heroes: Hero[];
+
+}
+
+export function PlayerRegistrationForm({
+  heroes,
+}: PlayerRegistrationFormProps) {
 
   const [state, formAction] =
     useActionState(
@@ -77,7 +89,6 @@ export function PlayerRegistrationForm() {
 
     <form
       action={formAction}
-      encType="multipart/form-data"
       className="space-y-8"
     >
 
@@ -95,7 +106,9 @@ export function PlayerRegistrationForm() {
         errors={state.errors}
       />
 
-      <PowerInformationCard />
+      <PowerInformationCard
+        heroes={heroes}
+/>
 
       <MigrationCard />
 

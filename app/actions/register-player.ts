@@ -40,35 +40,47 @@ export async function registerPlayer(
     const player =
       parseRegisterPlayer(formData);
 
+    if (process.env.NODE_ENV === "development") {
+
       console.log("========== FORM DATA ==========");
 
-for (const [key, value] of formData.entries()) {
-  console.log(key, value);
-}
+      for (const [key, value] of formData.entries()) {
 
-console.log("===============================");
+        console.log(key, value);
+
+      }
+
+      console.log("===============================");
+
+    }
 
     // ==========================================================
     // Server Validation
     // ==========================================================
 
     const validation =
-  PlayerRegistrationFormSchema.safeParse(player);
+      PlayerRegistrationFormSchema.safeParse(
+        player
+      );
 
-if (!validation.success) {
+    if (!validation.success) {
 
-  console.log("==========================");
-  console.log("VALIDATION ERROR");
-  console.log(validation.error.flatten());
-  console.log("==========================");
+      if (process.env.NODE_ENV === "development") {
 
-  return {
-    success: false,
-    message: "Validation failed.",
-    errors: validation.error.flatten().fieldErrors,
-  };
+        console.log("==========================");
+        console.log("VALIDATION ERROR");
+        console.log(validation.error.flatten());
+        console.log("==========================");
 
-}
+      }
+
+      return {
+        success: false,
+        message: "Validation failed.",
+        errors: validation.error.flatten().fieldErrors,
+      };
+
+    }
 
     const validatedPlayer =
       validation.data;
@@ -85,9 +97,11 @@ if (!validation.success) {
     const playerRecord =
       savedPlayer as { id: string };
 
-      // Refresh homepage cache
-revalidatePath("/");
+    // ==========================================================
+    // Refresh Cache
+    // ==========================================================
 
+    revalidatePath("/");
 
     // ==========================================================
     // Save Success Cookie
