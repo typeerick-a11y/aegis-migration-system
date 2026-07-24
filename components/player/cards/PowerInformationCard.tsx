@@ -233,6 +233,11 @@ export function PowerInformationCard({
               </SelectContent>
 
             </Select>
+
+            <Input
+  type="hidden"
+  {...register("troopType")}
+/>
               <p className="text-xs text-gray-500">
   Selected: {selectedTroopType}
 </p>
