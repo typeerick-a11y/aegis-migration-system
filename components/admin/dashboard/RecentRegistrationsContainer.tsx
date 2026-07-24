@@ -11,7 +11,7 @@ import { DashboardService }
   from "@/lib/services/dashboard.service";
 
 import RecentRegistrations
-  from "./RecentRegistrations";
+  from "./sections/RecentRegistrations";
 
 export default async function RecentRegistrationsContainer() {
 

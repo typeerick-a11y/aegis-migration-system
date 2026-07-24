@@ -6,12 +6,14 @@
  * Description : Dashboard Statistics Container
  * ==========================================================
  */
-
-import DashboardStatistics
-  from "./DashboardStatistics";
+import DashboardHeader from "./DashboardHeader";
+import DashboardOverview from "./sections/DashboardOverview";
 
 import { DashboardService }
   from "@/lib/services/dashboard.service";
+
+  import RecentRegistrationsContainer
+  from "./RecentRegistrationsContainer";
 
 export default async function DashboardContainer() {
 
@@ -20,10 +22,18 @@ export default async function DashboardContainer() {
 
   return (
 
-    <DashboardStatistics
-      statistics={statistics}
+  <div className="space-y-8">
+
+    <DashboardHeader />
+
+    <DashboardOverview
+        statistics={statistics}
     />
 
-  );
+    <RecentRegistrationsContainer />
+
+</div>
+
+);
 
 }
