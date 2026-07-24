@@ -25,27 +25,15 @@ export default function OverviewCard({
 
   return (
 
-    <Card className="rounded-xl border bg-white px-5 py-4 shadow-sm">
+    <Card className="px-5 py-4">
 
-      <div className="flex items-center justify-between">
+      <p className="text-xs uppercase text-muted-foreground">
+        {title}
+      </p>
 
-        <div>
-
-          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-
-            {title}
-
-          </p>
-
-          <h2 className="mt-1 text-3xl font-bold text-zinc-900">
-
-            {value}
-
-          </h2>
-
-        </div>
-
-      </div>
+      <h2 className="mt-2 text-3xl font-bold">
+        {value}
+      </h2>
 
     </Card>
 
