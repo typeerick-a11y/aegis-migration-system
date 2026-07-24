@@ -231,10 +231,7 @@ export function PowerInformationCard({
               </SelectContent>
 
             </Select>
-              <Input
-  type="hidden"
-  {...register("troopType")}
-/>
+              
             {clientErrors.troopType && (
 
               <p className="text-sm text-red-500">
