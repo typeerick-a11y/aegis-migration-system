@@ -38,7 +38,11 @@ export async function registerPlayer(
     // ==========================================================
 
     const player =
-      parseRegisterPlayer(formData);
+  parseRegisterPlayer(formData);
+
+console.log("========== FORM DATA ==========");
+console.log(player);
+console.log("===============================");
 
     if (process.env.NODE_ENV === "development") {
 
@@ -65,16 +69,12 @@ export async function registerPlayer(
 
     if (!validation.success) {
 
-      if (process.env.NODE_ENV === "development") {
+  console.log("==========================");
+  console.log("VALIDATION ERROR");
+  console.log(validation.error.flatten());
+  console.log("==========================");
 
-        console.log("==========================");
-        console.log("VALIDATION ERROR");
-        console.log(validation.error.flatten());
-        console.log("==========================");
-
-      }
-
-      return {
+  return {
         success: false,
         message: "Validation failed.",
         errors: validation.error.flatten().fieldErrors,
@@ -125,7 +125,10 @@ export async function registerPlayer(
 
   } catch (error) {
 
-    console.error(error);
+    console.error("==========================");
+console.error("REGISTER ERROR");
+console.error(error);
+console.error("==========================");
 
     return {
 
