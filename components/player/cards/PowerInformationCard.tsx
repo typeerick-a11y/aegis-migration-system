@@ -183,24 +183,26 @@ export function PowerInformationCard({
             </Label>
 
             <Select
-            
-              value={selectedTroopType}
-              onValueChange={(value) => {
+  value={selectedTroopType}
+  onValueChange={(value) => {
 
-                setValue(
-                  "troopType",
-                  value as
-                    | "Sword"
-                    | "Pike"
-                    | "Archer"
-                    | "Cavalry",
-                  {
-                    shouldValidate: true,
-                  }
-                );
+    console.log("Troop selected:", value);
 
-              }}
-            >
+    setValue(
+      "troopType",
+      value as
+        | "Sword"
+        | "Pike"
+        | "Archer"
+        | "Cavalry",
+      {
+        shouldValidate: true,
+        shouldDirty: true,
+      }
+    );
+
+  }}
+>
 
               <SelectTrigger>
 
@@ -231,7 +233,9 @@ export function PowerInformationCard({
               </SelectContent>
 
             </Select>
-              
+              <p className="text-xs text-gray-500">
+  Selected: {selectedTroopType}
+</p>
             {clientErrors.troopType && (
 
               <p className="text-sm text-red-500">
